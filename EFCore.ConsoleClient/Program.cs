@@ -13,6 +13,8 @@ namespace EFCore.ConsoleClient
             DisconnectedEntityGraph.Test();
 
             TrackingTrackGraph.Test();
+
+            RawSQLQueries.Test();
         }
 
 

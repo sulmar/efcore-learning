@@ -4,7 +4,20 @@
 * Instalacja
 * Istniejąca baza danych
 * DbContext
-* 
+* Pierwsza aplikacja
+* Migracje
+* Zapytania
+* Zapisywanie danych
+* Konwencje
+* Konfiguracje
+* Relacje FluentApi
+* Praca z odłączonymi encjami
+* Śledzenie zmian
+* Surowe zapytania SQL
+* Procedury składowane
+* Filtry globalne
+* Konwertery
+
 
 # Wprowadzenie
 
