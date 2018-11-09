@@ -1,5 +1,7 @@
 # Odłączone encje
 
+
+
 ## Attach
 Metoda **Attach()** przyłącza odłączony graf encji i zaczyna go śledzić.
 
@@ -19,3 +21,7 @@ context.Attach(entityGraph).State = state;
 
 
 ## Entry
+
+
+## Add
+Metody *DbContext.Add()* i *DbSet.Add()* przyłączają graf encji do kontekstu i ustawiają stan encji na **Added** niezależnie od tego czy posiadają wartość klucza czy też nie.
