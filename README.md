@@ -1,5 +1,60 @@
-# Odłączone encje
 
+# Spis treści
+* Wprowadzenie
+* Instalacja
+* Istniejąca baza danych
+* DbContext
+* 
+
+# Wprowadzenie
+
+## Dostawcy baz danych
+
+| Database | NuGet Package  |
+|---|---|
+| SQL Server | Microsoft.EntityFrameworkCore.SqlServer |
+| SQLite | Microsoft.EntityFrameworkCore.SQLite |
+| MySQL | MySql.Data.EntityFrameworkCore |
+| PostgreSQL | Npgsql.EntityFrameworkCore.PostgreSQL |
+| SQL Compact | EntityFrameworkCore.SqlServerCompact40 |
+| In-memory | 	Microsoft.EntityFrameworkCore.InMemory |
+
+
+# Instalacja
+
+# Istniejąca baza danych
+
+Instalacja narzędzi
+``` powershell
+Install-Package Microsoft.EntityFrameworkCore.Tools
+```
+
+Wygenerowanie klas na podstawie bazy danych
+``` powershell
+PM> Scaffold-DbContext "Server=.\SQLExpress;Database=Northwind;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+```
+
+# DbContext
+Klasa DbContext jest główną częścią Entity Framework. Instacja DbContext reprezentuje sesję z bazą danych.
+
+DbContext umożliwia następujące zadania:
+ 1. Zarządzanie połączeniem z bazą danych
+ 2. Konfiguracja modelu i relacji
+ 3. Odpytywanie bazy danych
+ 4. Zapisywanie danych do bazy danych
+ 5. Śledzenie zmian
+ 6. Cacheowanie
+ 7. Zarządzanie transakcjami
+
+## Właściwości DbContext
+| Metoda | Użycie |
+|---|---|
+| ChangeTracker | Dostarcza informacje i operacje do śledzenie obiektów  |
+| Database | Dostarcza informacje i operacje bazy danych |
+| Model | Zwraca metadane o encjach, ich relacjach i w jaki sposób mapowane są do bazy danych |
+
+
+# Praca z odłączonymi encjami
 
 
 ## Attach()
@@ -55,3 +110,4 @@ Metoda *Delete()* ustawia stan głównej encji na **Deleted**.
 | DbContext.Delete  | Deleted  | Exception  | Unchanged  | Added  |
 
 
+# Praca z odłączonymi encjami
