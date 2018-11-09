@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCore.Models", "EFCore.Models\EFCore.Models.csproj", "{785FB7D2-F6CA-4EEB-A0EA-4516F94504B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCore.ConsoleClient", "EFCore.ConsoleClient\EFCore.ConsoleClient.csproj", "{74B405EF-E315-4E08-AF8F-0EABBC108243}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{785FB7D2-F6CA-4EEB-A0EA-4516F94504B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{785FB7D2-F6CA-4EEB-A0EA-4516F94504B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{785FB7D2-F6CA-4EEB-A0EA-4516F94504B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74B405EF-E315-4E08-AF8F-0EABBC108243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74B405EF-E315-4E08-AF8F-0EABBC108243}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74B405EF-E315-4E08-AF8F-0EABBC108243}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74B405EF-E315-4E08-AF8F-0EABBC108243}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
