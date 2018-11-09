@@ -11,6 +11,8 @@ namespace EFCore.ConsoleClient
            // Generator.Generate();
 
             DisconnectedEntityGraph.Test();
+
+            TrackingTrackGraph.Test();
         }
 
 
