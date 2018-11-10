@@ -13,6 +13,7 @@ namespace EFCore.ConsoleClient.Fakers
             RuleFor(u => u.Gender, f => f.PickRandom<Gender>());
             RuleFor(p => p.FirstName, f => f.Name.FirstName());
             RuleFor(p => p.LastName, f => f.Name.LastName());
+            RuleFor(p => p.IsDeleted, f => f.Random.Bool(0.8f));
             Ignore(p => p.Orders);
         }
     }

@@ -11,14 +11,27 @@ namespace EFCore.ConsoleClient
     {
         public static void Test()
         {
+            ExecuteSqlTest();
+
             QueryTest();
 
             ParameterizedQueryTest();
 
             QueryLINQOperatorsTest();
+
+            ExecuteReaderTest();
         }
 
-       
+        private static void ExecuteSqlTest()
+        {
+            System.Console.WriteLine("Execute SQL Test");
+
+            using(var context = new MyContext())
+            {
+                var commandText = "UPDATE Customers SET IsDeleted = 1 WHERE Id = 1";
+                context.Database.ExecuteSqlCommand(commandText);
+            }
+        }
 
         private static void QueryTest()
         {
@@ -46,6 +59,23 @@ namespace EFCore.ConsoleClient
             }
         }
 
+
+        // private static void NamedParameterizedQueryTest()
+        // {
+        //     Console.WriteLine("Named Parameterized Query Test");
+
+        //     string firstName = "Kris";
+
+        //     var firstNameParameter = new SqlParameter("firstname", firstName);
+
+        //     using (var context = new MyContext())
+        //     {
+        //         var customers = context.Customers.FromSql($"select * from Customers where FirstName = @firstname", firstNameParameter).ToList();
+
+        //         Display(customers);
+        //     }
+        // }
+
         private static void QueryLINQOperatorsTest()
         {
             Console.WriteLine("Query LINQ Operators Test");
@@ -57,6 +87,21 @@ namespace EFCore.ConsoleClient
                     .ToList();
 
                 Display(customers);
+            }
+        }
+
+        private static void ExecuteReaderTest()
+        {
+            using (var context = new MyContext())
+            using (var command = context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = "SELECT * From Customers";
+                context.Database.OpenConnection();
+                using (var result = command.ExecuteReader())
+                {
+                    System.Console.WriteLine($"{result.GetString(2)}, {result.GetBoolean(4)}");
+                    // do something with result
+                }
             }
         }
 

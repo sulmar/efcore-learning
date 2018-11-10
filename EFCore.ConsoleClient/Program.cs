@@ -8,13 +8,17 @@ namespace EFCore.ConsoleClient
         {
             Console.WriteLine("Hello World!");
 
-           // Generator.Generate();
+            Generator.Generate();
 
             DisconnectedEntityGraph.Test();
 
             TrackingTrackGraph.Test();
 
             RawSQLQueries.Test();
+
+            GlobalQueryFilters.Test();
+
+            TrackingNoTracking.Test();
         }
 
 

@@ -24,7 +24,7 @@ namespace EFCore.ConsoleClient.Configurations
                 new Customer { Id = 2, FirstName = "Ann", LastName = "Smith" }
                 );
 
-
+            builder.HasQueryFilter(p => !p.IsDeleted);
         }
     }
 }
