@@ -67,6 +67,75 @@ DbContext umożliwia następujące zadania:
 | Model | Zwraca metadane o encjach, ich relacjach i w jaki sposób mapowane są do bazy danych |
 
 
+# Migracje
+
+## Instalacja narzędzi
+``` bash
+dotnet add package Microsoft.EntityFrameworkCore.Design
+```
+
+## Utworzenie migracji
+
+powershell
+``` powershell
+Add-Migration InitialCreate
+```
+
+console
+``` bash
+dotnet ef migrations add InitialCreate
+```
+
+## Aktualizacja bazy danych
+
+``` powershell
+Update-Database
+```
+
+console 
+``` bash
+dotnet ef database update
+```
+
+## Usuwanie migracji
+
+PowerShell
+~~~ Powershell
+Remove-Migration
+~~~
+
+Konsola
+~~~ bash
+dotnet ef migrations remove
+~~~
+
+
+## Powracanie do migracji
+
+PowerShell
+~~~ Powershell
+Update-Database LastGoodMigration
+~~~
+
+Konsola
+~~~ bash
+dotnet ef database update LastGoodMigration
+~~~
+
+
+
+## Generowanie skryptu SQL
+PowerShell
+~~~ Powershell
+Script-Migration
+~~~
+
+Konsola
+~~~ basg
+dotnet ef migrations script
+~~~
+
+
 # Praca z odłączonymi encjami
 
 
