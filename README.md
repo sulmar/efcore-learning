@@ -70,9 +70,18 @@ DbContext umożliwia następujące zadania:
 # Migracje
 
 ## Instalacja narzędzi
+
+PMC
+```
+Microsoft.EntityFrameworkCore.Tools
+```
+
+
+CLI
 ``` bash
 dotnet add package Microsoft.EntityFrameworkCore.Design
 ```
+Uzyskamy polecenia dotnet ef
 
 ## Utworzenie migracji
 
