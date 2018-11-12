@@ -56,7 +56,7 @@ DbContext umożliwia następujące zadania:
  3. Odpytywanie bazy danych
  4. Zapisywanie danych do bazy danych
  5. Śledzenie zmian
- 6. Cacheowanie
+ 6. Cache'owanie
  7. Zarządzanie transakcjami
 
 ## Właściwości DbContext
@@ -145,6 +145,191 @@ dotnet ef migrations script
 ~~~
 
 
+# Konwencja relacji Jeden-do-wielu
+
+## Konwencja 1
+Encja zawiera navigation property.
+
+``` csharp
+public class Order
+{
+    public int OrderId { get; set; }   
+    public string OrderNumber { get; set; }  
+
+    public Customer Customer { get; set; } // Navigation property
+}
+
+public class Customer
+{
+    public int CustomerId { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+}
+
+```
+Zamówienie zawiera referencje do navigation property typu klient. EF utworzy shadow property CustomerId w modelu koncepcyjnym, które będzie mapowane do kolumny CustomerId w tabeli Orders.
+
+## Konwencja 2
+Encja zawiera kolekcję.
+
+``` csharp
+public class Order
+{
+    public int OrderId { get; set; }       
+    public string OrderNumber { get; set; } 
+}
+
+public class Customer
+{
+    public int CustomerId { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+
+    public List<Order> Orders { get; set; }
+}
+
+```
+
+W bazie danych będzie taki sam rezultat jak w przypadku konwencji 1.
+
+## Konwencja 3
+
+Relacja zawiera navigation property po obu stronach. W rezultacie otrzymujemy połączenie konwencji 1 i 2.
+
+
+``` csharp
+public class Order
+{
+    public int OrderId { get; set; }       
+    public string OrderNumber { get; set; } 
+
+    public Customer Customer { get; set; } // Navigation property
+}
+
+public class Customer
+{
+    public int CustomerId { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+
+    public List<Order> Orders { get; set; }
+}
+
+```
+
+## Konwencja 4
+Konwencja z uzyciem wlasciwosci foreign key
+
+
+``` csharp
+public class Order
+{
+    public int OrderId { get; set; }       
+    public string OrderNumber { get; set; } 
+
+    public int CustomerId { get; set; }  // Foreign key property
+    public Customer Customer { get; set; } // Navigation property
+}
+
+public class Customer
+{
+    public int CustomerId { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+
+    public List<Order> Orders { get; set; }
+}
+
+```
+
+
+# Konwencja relacji Jeden-do-jeden
+
+``` csharp
+public class Order
+{
+    public int OrderId { get; set; }       
+    public string OrderNumber { get; set; } 
+
+    public Payment Payment { get; set; } // Navigation property
+}
+
+public class Payment
+{
+    public int PaymentId { get; set; }
+    public decimal Amount { get; set; }
+
+    public int OrderId { get; set; }
+    public Order Order { get; set; }
+}
+```
+
+# Konwencja relacji wiele-do-wielu
+
+Obecnie w EF Core nie ma domyslnej konwencji, która konfiguruje relację wiele-do-wielu. Trzeba uzyc Fluent Api.
+
+
+# Konfiguracja relacji Jeden-do-wielu z uzyciem Fluent API
+
+
+``` csharp
+   protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Order>()
+                .HasOne<Customer>()
+                .WithMany(c=>c.Orders)
+                .HasForeignKey(p=>p.CustomerId);
+``` 
+
+
+Alternatywnie mozna wyjsc od drugiej strony
+``` csharp
+            modelBuilder.Entity<Customer>()
+                .HasMany(c=>c.Orders)
+                .WithOne(o=>o.Customer)
+                .HasForeignKey(o=>o.CustomerId);
+
+
+        }
+```
+
+## Konfiguracja kaskadowego usuwania z Fluent API
+
+``` csharp
+modelBuilder.Entity<Customer>()
+                .HasMany(c=>c.Orders)
+                .WithOne(o=>o.Customer)
+                .HasForeignKey(o=>o.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
+```
+
+Rodzaje:
+- Cascade - usuwa wszystkie encje wraz z encją nadrzędną
+- ClientSetNull - klucze obce w encjach zaleznych będą ustawione na null
+- Restrict - blokuje kaskadowe usuwanie
+- SetNull - klucze obce w encjach zaleznych będą ustawione na null
+
+
+## Konfiguracja jeden-do-jeden z Fluent API
+
+
+``` csharp
+ modelBuilder.Entity<Order>()
+                .HasOne<Payment>()
+                .WithOne(p=>p.Order)
+                .HasForeignKey<Payment>(p=>p.PaymentId);
+```
+
+
+# SQLite
+
+- DB Browser for SQLite
+http://sqlitebrowser.org
+
+
+
+
+
 # Praca z odłączonymi encjami
 
 
@@ -201,4 +386,3 @@ Metoda *Delete()* ustawia stan głównej encji na **Deleted**.
 | DbContext.Delete  | Deleted  | Exception  | Unchanged  | Added  |
 
 
-# Praca z odłączonymi encjami
