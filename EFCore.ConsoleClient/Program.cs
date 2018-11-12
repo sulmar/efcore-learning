@@ -19,6 +19,8 @@ namespace EFCore.ConsoleClient
             GlobalQueryFilters.Test();
 
             TrackingNoTracking.Test();
+
+            Querying.Test();
         }
 
 

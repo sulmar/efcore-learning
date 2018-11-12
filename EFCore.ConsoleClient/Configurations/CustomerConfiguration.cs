@@ -1,6 +1,7 @@
 ﻿using EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,6 +19,39 @@ namespace EFCore.ConsoleClient.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             //   builder.OwnsOne(p=>p.ShippingAddress);
+
+            // KONWERTERY
+            
+            // konwersja
+            // builder.Property(p=>p.Gender)
+            //     .HasConversion(
+            //         v => v.ToString(),
+            //         v => (Gender)Enum.Parse(typeof(Gender), v)
+            //     );
+
+            // Klasa konwertera
+            // var converter = new ValueConverter<Gender, string>(
+            //     v => v.ToString(),
+            //     v => (Gender)Enum.Parse(typeof(Gender), v));
+
+            // wbudowany konwerter
+            // https://docs.microsoft.com/en-us/ef/core/modeling/value-conversions
+            // var converter = new EnumToStringConverter<Gender>();
+
+            //  builder.Property(p=>p.Gender)
+            //     .HasConversion(converter);
+
+            // predefiniowane konwersje
+            builder.Property(p=>p.Gender)
+                .HasConversion<string>();
+
+
+            builder.Property(p=>p.IsDeleted)
+                .HasConversion(new BoolToStringConverter("Y", "N"));
+
+            // builder.Property(p=>p.Gender)
+            //     .HasColumnType("nvarchar(20)");
+
 
             builder.HasData(
                 new Customer { Id = 1, FirstName = "John", LastName = "Smith" },
