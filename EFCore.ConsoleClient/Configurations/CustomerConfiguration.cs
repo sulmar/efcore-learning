@@ -18,7 +18,10 @@ namespace EFCore.ConsoleClient.Configurations
                 .HasForeignKey(o => o.CustomerId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Owned Entity Type
             //   builder.OwnsOne(p=>p.ShippingAddress);
+
+          
 
             // KONWERTERY
             
