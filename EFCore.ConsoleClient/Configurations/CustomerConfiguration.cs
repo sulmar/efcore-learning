@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -51,6 +52,11 @@ namespace EFCore.ConsoleClient.Configurations
 
             builder.Property(p=>p.IsDeleted)
                 .HasConversion(new BoolToStringConverter("Y", "N"));
+
+            builder.Property(p => p.ShippingAddress).HasConversion(
+
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Address>(v));
 
             // builder.Property(p=>p.Gender)
             //     .HasColumnType("nvarchar(20)");

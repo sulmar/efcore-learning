@@ -13,7 +13,7 @@ namespace EFCore.Models
 
         public List<Order> Orders { get; set; }
 
-        //  public Address ShippingAddress { get; set; }
+        public Address ShippingAddress { get; set; }
 
         public bool IsDeleted { get; set; }
     }
