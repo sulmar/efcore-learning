@@ -1,4 +1,5 @@
-﻿using EFCore.Models;
+﻿using EFCore.ConsoleClient.Extensions;
+using EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -60,7 +61,11 @@ namespace EFCore.ConsoleClient.Configurations
             //    v => JsonConvert.DeserializeObject<Address>(v));
 
             // Użycie własnego konwertera
-            builder.Property(p => p.ShippingAddress).HasConversion(new JsonConverter<Address>());
+            // builder.Property(p => p.ShippingAddress).HasConversion(new JsonValueConverter<Address>());
+
+            // Użycie własnego konwertera za pomocą metody rozszerzającej
+            builder.Property(p => p.ShippingAddress)
+                .HasJsonValueConversion();
 
             // builder.Property(p=>p.Gender)
             //     .HasColumnType("nvarchar(20)");
