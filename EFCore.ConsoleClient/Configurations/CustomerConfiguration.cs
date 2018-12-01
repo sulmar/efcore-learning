@@ -49,14 +49,18 @@ namespace EFCore.ConsoleClient.Configurations
             builder.Property(p=>p.Gender)
                 .HasConversion<string>();
 
-
+            // Użycie wbudowanego konwertera
             builder.Property(p=>p.IsDeleted)
                 .HasConversion(new BoolToStringConverter("Y", "N"));
 
-            builder.Property(p => p.ShippingAddress).HasConversion(
+            // Konwerter za pomocą wyrażenia lambda
+            //builder.Property(p => p.ShippingAddress).HasConversion(
 
-                v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<Address>(v));
+            //    v => JsonConvert.SerializeObject(v),
+            //    v => JsonConvert.DeserializeObject<Address>(v));
+
+            // Użycie własnego konwertera
+            builder.Property(p => p.ShippingAddress).HasConversion(new JsonConverter<Address>());
 
             // builder.Property(p=>p.Gender)
             //     .HasColumnType("nvarchar(20)");
