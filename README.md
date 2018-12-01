@@ -386,7 +386,34 @@ Metoda *Delete()* ustawia stan głównej encji na **Deleted**.
 | DbContext.Delete  | Deleted  | Exception  | Unchanged  | Added  |
 
 
-## Konwertery
+# Filtry globalne
+
+## Konfiguracja filtra globalnego
+~~~ csharp
+ internal class CustomerConfiguration : IEntityTypeConfiguration<Customer>
+ {
+     public void Configure(EntityTypeBuilder<Customer> builder)
+     {
+        builder.HasQueryFilter(p => !p.IsDeleted);
+      }
+   }
+~~~
+
+### Lokalne wyłączenie filtra globalnego
+
+~~~ csharp
+using(var context = new MyContext())
+            {
+                var customers = context.Customers.IgnoreQueryFilters().ToList();
+
+                Display(customers);
+            }
+~~~
+       
+
+
+
+# Konwertery
 
 ### Wstęp
 Czasami sposób zapisu wartości jakiejś właściwości w bazie danych różni się od tej zdefiniowanej w klasie. 
