@@ -19,7 +19,33 @@
 * Konwertery
 
 
-# Wprowadzenie
+
+## Instalacja
+
+~~~ bash
+dotnet add package Microsoft.EntityFrameworkCore
+~~~
+
+## Instalacja dostawcy bazy danych SQL Server
+~~~ bash
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+~~~
+
+
+## Przydatne komendy CLI
+- ``` dotnet ef ``` - weryfikacja instalacji
+- ``` dotnet ef migrations add {migration} ``` - utworzenie migracji
+- ``` dotnet ef migrations remove ``` - usunięcie ostatniej migracji
+- ``` dotnet ef migrations list ``` - wyświetlenie listy wszystkich migracji
+- ``` dotnet ef migrations script ``` - wygenerowanie skryptu do aktualizacji bazy danych do najnowszej wersji
+- ``` dotnet ef database update ``` - aktualizacja bazy danych do najnowszej wersji
+- ``` dotnet ef database update -verbose ``` - aktualizacja bazy danych do najnowszej wersji + wyświetlanie logu
+- ``` dotnet ef database update {migration} ``` - aktualizacja bazy danych do podanej migracji
+- ``` dotnet ef database drop ``` - usunięcie bazy danych
+- ``` dotnet ef dbcontext info ``` - wyświetlenie informacji o DbContext (provider, nazwa bazy danych, źródło)
+- ``` dotnet ef dbcontext list ``` - wyświetlenie listy DbContextów
+- ``` dotnet ef dbcontext scaffold {connectionstring} Microsoft.EntityFrameworkCore.SqlServer -o Models ``` - wygenerowanie modelu na podstawie bazy danych
+
 
 ## Dostawcy baz danych
 
