@@ -20,13 +20,13 @@
 
 
 
-## Instalacja
+## Instalacja EF Core
 
 ~~~ bash
 dotnet add package Microsoft.EntityFrameworkCore
 ~~~
 
-## Instalacja dostawcy bazy danych SQL Server
+### Instalacja dostawcy bazy danych SQL Server
 ~~~ bash
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 ~~~
