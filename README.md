@@ -57,23 +57,14 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 - ``` dotnet ef dbcontext list ``` - wyświetlenie listy DbContextów
 - ``` dotnet ef dbcontext scaffold {connectionstring} Microsoft.EntityFrameworkCore.SqlServer -o Models ``` - wygenerowanie modelu na podstawie bazy danych
 
-
-
-
-
-# Instalacja
-
-# Istniejąca baza danych
-
-Instalacja narzędzi
-``` powershell
-Install-Package Microsoft.EntityFrameworkCore.Tools
-```
-
-Wygenerowanie klas na podstawie bazy danych
-``` powershell
-PM> Scaffold-DbContext "Server=.\SQLExpress;Database=Northwind;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
-```
+## Przydatne polecenia PMC
+- ``` Add-Migration {migration} ``` - utworzenie migracji
+- ``` Remove-Migration ``` - usunięcie ostatniej migracji
+- ``` Update-Database -script ``` - wygenerowanie skryptu do aktualizacji bazy danych do najnowszej wersji
+- ``` Update-Database ``` - aktualizacja bazy danych do najnowszej wersji
+- ``` Update-Database -verbose ``` - aktualizacja bazy danych do najnowszej wersji + wyświetlanie logu
+- ``` Update-Database {migration} ``` - aktualizacja bazy danych do podanej 
+- ``` Scaffold-DbContext {connectionstring} Microsoft. Models ``` - wygenerowanie modelu na podstawie bazy danych
 
 # DbContext
 Klasa DbContext jest główną częścią Entity Framework. Instacja DbContext reprezentuje sesję z bazą danych.
