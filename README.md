@@ -31,6 +31,17 @@ dotnet add package Microsoft.EntityFrameworkCore
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 ~~~
 
+### Dostawcy baz danych
+
+| Database | NuGet Package  |
+|---|---|
+| SQL Server | Microsoft.EntityFrameworkCore.SqlServer |
+| SQLite | Microsoft.EntityFrameworkCore.SQLite |
+| MySQL | MySql.Data.EntityFrameworkCore |
+| PostgreSQL | Npgsql.EntityFrameworkCore.PostgreSQL |
+| SQL Compact | EntityFrameworkCore.SqlServerCompact40 |
+| In-memory | 	Microsoft.EntityFrameworkCore.InMemory |
+
 
 ## Przydatne komendy CLI
 - ``` dotnet ef ``` - weryfikacja instalacji
@@ -47,16 +58,7 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 - ``` dotnet ef dbcontext scaffold {connectionstring} Microsoft.EntityFrameworkCore.SqlServer -o Models ``` - wygenerowanie modelu na podstawie bazy danych
 
 
-## Dostawcy baz danych
 
-| Database | NuGet Package  |
-|---|---|
-| SQL Server | Microsoft.EntityFrameworkCore.SqlServer |
-| SQLite | Microsoft.EntityFrameworkCore.SQLite |
-| MySQL | MySql.Data.EntityFrameworkCore |
-| PostgreSQL | Npgsql.EntityFrameworkCore.PostgreSQL |
-| SQL Compact | EntityFrameworkCore.SqlServerCompact40 |
-| In-memory | 	Microsoft.EntityFrameworkCore.InMemory |
 
 
 # Instalacja
