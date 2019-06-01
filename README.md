@@ -56,6 +56,34 @@ docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=yourStrong(!)Password' -p 1433:143
 docker exec -it <container_id|container_name> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P <your_password>
 ~~~
 
+
+~~~ csharp
+private static void CreateDbTest()
+{
+    string connectionString = "Server=127.0.0.1,1433;Database=mydb;User Id=sa;Password=P@ssw0rd";
+
+    // string connectionString = Configuration.GetConnectionString("MyConnectionString");
+
+    var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
+    optionsBuilder.UseSqlServer(connectionString);
+
+    using (var context = new MyContext(optionsBuilder.Options))
+    {
+        bool created = context.Database.EnsureCreated(); 
+
+        System.Console.WriteLine(created);
+
+    }
+}
+~~~
+
+
+- Azure Data Studio
+
+https://docs.microsoft.com/en-us/sql/azure-data-studio/download?view=sql-server-2017
+
+
+
 ## Instalacja EF Core
 
 ~~~ bash
@@ -104,6 +132,56 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 
 # DbContext
 Klasa DbContext jest główną częścią Entity Framework. Instacja DbContext reprezentuje sesję z bazą danych.
+
+
+Models.cs
+
+~~~ csharp
+
+public class Order
+{
+    public int OrderId { get; set; }   
+    public string OrderNumber { get; set; }  
+    public DateTime OrderDate { get; set; }
+    public DateTime DeliveryDate? { get; set; }
+    public Customer Customer { get; set; }
+}
+
+public class Customer
+{
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public bool IsDeleted { get; set; }
+}
+
+~~~
+
+
+MyContext.cs
+
+~~~ csharp
+public class MyContext : DbContext
+{
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Order> Orders { get; set; }
+
+    public CustomersContext(DbContextOptions options) 
+        : base(options)
+    {
+    }
+}
+~~~
+
+~~~ csharp
+var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
+optionsBuilder.UseSqlite("Data Source=blog.db");
+
+using (var context = new MyContext(optionsBuilder.Options))
+{
+  // do stuff
+}
+~~~
 
 DbContext umożliwia następujące zadania:
  1. Zarządzanie połączeniem z bazą danych
