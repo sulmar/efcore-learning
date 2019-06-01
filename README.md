@@ -36,8 +36,25 @@
 - ``` dotnet new sln ``` - utworzenie nowego rozwiązania
 - ``` dotnet sln {solution.sln} add {project.csproj}``` - dodanie projektu do rozwiązania
 - ``` dotnet sln {solution.sln} remove {project.csproj}``` - usunięcie projektu z rozwiązania
-- 
+- ``` dotnet publish -c Release -r {platform}``` - publikacja aplikacji
+- ``` dotnet publish -c Release -r win10-x64``` - publikacja aplikacji dla Windows
+- ``` dotnet publish -c Release -r linux-x64``` - publikacja aplikacji dla Linux
+- ``` dotnet publish -c Release -r osx-x64``` - publikacja aplikacji dla MacOS
+
+
+
 # Entity Framework Core
+
+## Instalacja SQL Server jako obraz Docker
+
+~~~ bash
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=yourStrong(!)Password' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+~~~
+
+## Uruchomienie w trybie interaktywnym
+~~~
+docker exec -it <container_id|container_name> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P <your_password>
+~~~
 
 ## Instalacja EF Core
 
@@ -103,16 +120,6 @@ DbContext umożliwia następujące zadania:
 | ChangeTracker | Dostarcza informacje i operacje do śledzenie obiektów  |
 | Database | Dostarcza informacje i operacje bazy danych |
 | Model | Zwraca metadane o encjach, ich relacjach i w jaki sposób mapowane są do bazy danych |
-
-
-# Migracje
-
-## Instalacja narzędzi
-
-PMC
-```
-Microsoft.EntityFrameworkCore.Tools
-```
 
 
 
@@ -290,6 +297,17 @@ Rodzaje:
                 .WithOne(p=>p.Order)
                 .HasForeignKey<Payment>(p=>p.PaymentId);
 ```
+
+# Migracje
+
+## Instalacja narzędzi
+
+PMC
+```
+Microsoft.EntityFrameworkCore.Tools
+```
+
+
 
 
 # SQLite
@@ -494,4 +512,56 @@ A następnie użyć jej podczas konfiguracji
                 .HasJsonValueConversion();
 ~~~
 
+
+# Change Tracker
+
+Odczytanie stanu encji
+
+~~~ csharp
+
+Trace.WriteLine(context.Entry(customer).State);
+foreach (var property in context.Entry(customer).Properties)
+{
+    Trace.WriteLine($"{property.Metadata.Name} {property.IsModified} {property.OriginalValue} -> {property.CurrentValue}");
+}
+
+~~~
+
+
+# SQL
+
+Uruchomienie zapytania SQL i pobranie wyników
+
+~~~ csharp
+public IEnumerable<Customer> Get(string lastname)
+{
+    string sql = $"select * from dbo.customers where LastName = '{lastname}'";
+    return context.Customers.FromSql(sql);
+}
+~~~
+
+- Uruchomienie procedury składowanej
+~~~ csharp
+using (var context = new SampleContext())
+{
+    var books = context.Customers
+        .FromSql("EXEC GetAllCustomers")
+        .ToList();
+}
+~~~
+
+- Uruchomienie sparametryzowanej procedury składowanej
+~~~ csharp
+using (var context = new SampleContext())
+{
+    var city = new SqlParameter("@City", "Warsaw");
+    var customers = context.Books
+        .FromSql("EXEC GetCustomersByCity @City" , city)
+        .ToList();
+}
+~~~
+
+# DbQuery
+Typ **DbQuery** został wprowadzony w .NET Core 2.1. Umozliwia mapowanie tabel i widoków.
+Przypomina typ **DbSet** ale nie posiada operacji do zapisu, np. Add(). 
 
