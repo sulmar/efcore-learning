@@ -643,3 +643,95 @@ using (var context = new SampleContext())
 Typ **DbQuery** został wprowadzony w .NET Core 2.1. Umozliwia mapowanie tabel i widoków.
 Przypomina typ **DbSet** ale nie posiada operacji do zapisu, np. Add(). 
 
+## DbQuery
+
+~~~ sql
+create view OrderHeaders as
+    select      c.Name as CustomerName, 
+                o.DateCreated, 
+                sum(oi.Price) as TotalPrice, 
+                count(oi.Price) as TotalItems
+    from        OrderItems  oi 
+                inner join Orders o on oi.OrderId = o.OrderId
+                inner join Customers c on o.CustomerId = c.CustomerId
+    group by oi.OrderId, c.Name, o.DateCreated
+~~~ 
+
+Models.cs
+~~~ csharp
+public class OrderHeader
+{
+    public string CustomerName { get; set; }
+    public DateTime DateCreated { get; set; }
+    public int TotalItems { get; set; }
+    public decimal TotalPrice { get; set; }
+}
+~~~
+
+MyContext.cs
+~~~ csharp
+public class MyContext : DbContext
+{
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Customer> Customers { get; set; }
+    public DbQuery<OrderHeader> OrderHeaders { get; set; }
+    ...
+}
+~~~
+
+## Konfiguracja
+Właściwości typu DbSet i DbQuery mozna rozdzielic na osobne pliki za pomocą klas częściowych
+
+MyContext.cs
+~~~ csharp
+public partial class MyContext : DbContext
+{
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Customer> Customers { get; set; }
+    ...
+}
+
+~~~
+
+MyContextDbQuery.cs
+~~~ csharp
+public partial class MyContext : DbContext
+{
+    public DbQuery<OrderHeader> OrderHeaders { get; set; }
+    public DbQuery<OrderTotal> OrderTotals { get; set; }
+    ...
+}
+~~~
+
+
+## bez deklaracji DbQuery
+
+Istnieje równiez mozliwośc pobierania danych z widoków bez uzycia DbQuery
+
+~~~ csharp
+
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Query<OrderHeader>().ToView("OrderHeaders");
+}
+
+~~~
+
+~~~ csharp
+
+var orderHeaders = db.Query<OrderHeader>().ToList();
+~~~
+
+
+## FromSql
+Jeśli nie posiadasz uprawnień do tworzenia widoków i tabel, ale chciałbyś skorzystac z typowanych klas, mozna uzyc metody **FromSql()**
+
+~~~ csharp
+var orderHeaders = db.OrderHeaders.FromSql(
+                    @"select c.Name as CustomerName, o.DateCreated, sum(oi.Price) as TotalPrice, 
+                    count(oi.Price) as TotalItems
+                    from  OrderItems  oi 
+                    inner join Orders o on oi.OrderId = o.OrderId
+                    inner join Customers c on o.CustomerId = c.CustomerId
+                    group by oi.OrderId, c.Name, o.DateCreated");
+~~~
