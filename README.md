@@ -394,8 +394,44 @@ Microsoft.EntityFrameworkCore.Tools
 http://sqlitebrowser.org
 
 
+# Śledzenie (Tracking)
 
 
+## Wyłączenie śledzenia
+
+~~~ csharp
+using (var context = new MyContext())
+{
+    var blogs = context.Customers
+        .AsNoTracking()
+        .ToList();
+}
+~~~
+
+## Globalne wyłączenie śledzenia 
+
+~~~ csharp
+using (var context = new MyContext())
+{
+    context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+
+    var blogs = context.Blogs.ToList();
+}
+~~~
+
+## Śledzenie i projekcja
+
+~~~ csharp
+using (var context = new MyContext())
+{
+    var blog = context.Customers
+        .Select(c =>
+            new
+            {
+                Customer = c,
+                Orders = b.Orders.Count()
+            });
+}
 
 # Praca z odłączonymi encjami
 
