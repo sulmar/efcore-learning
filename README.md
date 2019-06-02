@@ -735,3 +735,48 @@ var orderHeaders = db.OrderHeaders.FromSql(
                     inner join Customers c on o.CustomerId = c.CustomerId
                     group by oi.OrderId, c.Name, o.DateCreated");
 ~~~
+
+
+# Shadow Properties
+
+**Shadow Properties** są właściwościami, które nie są widoczne w klasach encji, ale są zawarte w modelu i są mapowane na kolumny w bazie danych. 
+
+Shadow Properties są przydatne w wielu scenariuszach:
+- brak dostępu do kodu źródłowego klas encji
+- jeśli nie chcesz umieszczac w klasach encji kluczy obcych lub metadanych (DateCreated, LastUpdated lub rovwersion).
+
+## Konfiguracja
+
+~~~ csharp
+public class MyContext : DbContext
+{
+    public DbSet<Customer> Customers { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Customer>()
+            .Property<DateTime>("LastUpdated");
+    }
+}
+
+## Ustawianie wartości Shadow Properties 
+
+~~~ csharp
+    context.Add(customer);
+    context.Entry(customer).Property("LastUpdated").CurrentValue = DateTime.UtcNow();
+    context.SaveChanges();
+~~~
+
+## Kwerendy z Shadow Properties 
+
+~~~ csharp
+var customers = context.Customers.OrderBy(c=>EF.Property<DateTime>(c, "LastUpdated"));
+~~~
+
+lub od C# 6.0 z uzyciem _using static_
+
+
+~~~ csharp
+using static Microsoft.EntityFrameworkCore.EF;
+var customers = context.Customers.OrderBy(c=>Property<DateTime>(c, "LastUpdated"));
+~~~
