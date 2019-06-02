@@ -794,3 +794,7 @@ lub od C# 6.0 z uzyciem _using static_
 using static Microsoft.EntityFrameworkCore.EF;
 var customers = context.Customers.OrderBy(c=>Property<DateTime>(c, "LastUpdated"));
 ~~~
+
+
+# Migracja z EF6 do EF Core
+http://www.mikee.se/posts/migrating_from_ef6_to_ef_core
