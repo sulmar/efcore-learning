@@ -767,6 +767,20 @@ public class MyContext : DbContext
     context.SaveChanges();
 ~~~
 
+~~~ csharp
+public overrride int SaveChanges()
+{
+    var addedEntities = ChangeTracker.Entries().Where(p=>p.State == EntityState.Added);
+
+    foreach(var entry in addedEntities)
+    {
+        entry.Property("CreatedDate").CurrentValue = DateTime.UtcNow();
+    }
+
+    return base.SaveChanges();
+}
+~~~
+
 ## Kwerendy z Shadow Properties 
 
 ~~~ csharp
