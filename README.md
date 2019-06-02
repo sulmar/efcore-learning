@@ -842,5 +842,19 @@ x.Entity<Token>()
     .IsUnique(true);
 ~~~
 
+
+# Domyślne wartości
+
+~~~ csharp
+
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Employee>()
+        .Property(b => b.CreatedDate)
+        .HasDefaultValueSql("CONVERT(date, GETDATE())");
+}
+
+~~~
+
 # Migracja z EF6 do EF Core
 http://www.mikee.se/posts/migrating_from_ef6_to_ef_core
