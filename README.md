@@ -222,6 +222,31 @@ DbContext umożliwia następujące zadania:
 | Database | Dostarcza informacje i operacje bazy danych |
 | Model | Zwraca metadane o encjach, ich relacjach i w jaki sposób mapowane są do bazy danych |
 
+## Migracje
+
+
+- Instalacja
+- 
+~~~
+dotnet add package Microsoft.EntityFrameworkCore.Design
+~~~
+
+W przypadku gdy DbContext posiada parametr i nie uzywamy DI nalezy utworzyc fabrykę:
+
+~~~ csharp
+public class MyContextFactory : IDesignTimeDbContextFactory<MyContext>
+    {
+        public MyContext CreateDbContext(string[] args)
+        {
+             string connectionString = "Server=127.0.0.1,1433;Database=mydb;User Id=sa;Password=P@ssw0rd";
+
+            var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
+            optionsBuilder.UseSqlServer(connectionString);
+            
+            return new MyContext(optionsBuilder.Options);
+        }
+    }
+~~~
 
 
 # Konwencja relacji Jeden-do-wielu
@@ -478,6 +503,7 @@ using (var context = new MyContext())
 
 ## TrackGraph
 
+TrackGraph to nowa koncepcja wprowadzona wraz z EF Core. Umozliwia przejscie po grafie i ustawienie stanu encji.
 
 ~~~ csharp
 context.ChangeTracker.TrackGraph(order, e => e.Entry.State = EntityState.Added);
