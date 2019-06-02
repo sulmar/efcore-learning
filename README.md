@@ -796,5 +796,15 @@ var customers = context.Customers.OrderBy(c=>Property<DateTime>(c, "LastUpdated"
 ~~~
 
 
+# Indeksy
+
+~~~ csharp
+x.Entity<Token>()
+    .HasIndex(d => new { d.ServiceKey, d.ExternalId })
+    .HasName("IX_ServiceKey_ExternalId")
+    .HasFilter(null)
+    .IsUnique(true);
+~~~
+
 # Migracja z EF6 do EF Core
 http://www.mikee.se/posts/migrating_from_ef6_to_ef_core
