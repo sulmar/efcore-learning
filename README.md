@@ -56,6 +56,22 @@ docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=yourStrong(!)Password' -p 1433:143
 docker exec -it <container_id|container_name> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P <your_password>
 ~~~
 
+# 
+
+## Utworzenie kontekstu
+
+~~~ csharp
+public class MyContext : DbContext
+{
+    public MyContext(DbContextOptions<MyContext> options)
+      :base(options)
+    { }
+
+    public DbSet<Customer> Customers { get; set; }
+}
+~~~
+
+## Utworzenie instacji
 
 ~~~ csharp
 private static void CreateDbTest()
@@ -77,6 +93,13 @@ private static void CreateDbTest()
 }
 ~~~
 
+## Wstrzykiwanie DbContext
+
+~~~ csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddDbContext<MyContext>(options => options.UseSqlite("Data Source=blog.db"));
+}~~~
 
 - Azure Data Studio
 
@@ -396,6 +419,12 @@ http://sqlitebrowser.org
 
 # Śledzenie (Tracking)
 
+## AutoDetectChanges
+
+Domyślnie właściwośc _ChangeTracker.AutoDetectChanges_ jest ustawiona na true.
+W celu zwiększenia wydajności, zwłaszcza przy dodawaniu wielu encji, ustaw na false.  
+Pamiętaj o wywołaniu metody _DetectChanges()_ przed _SaveChanges()_
+
 
 ## Wyłączenie śledzenia
 
@@ -419,6 +448,20 @@ using (var context = new MyContext())
 }
 ~~~
 
+## Pobranie informacji o encjach
+
+~~~ csharp
+ Console.WriteLine(
+   $"Tracked Entities: {context.ChangeTracker.Entries().Count()}");
+
+foreach (var entry in context.ChangeTracker.Entries())
+{
+    Console.WriteLine($"Entity: {entry.Entity.GetType().Name}, 
+                        State: {entry.State.ToString()} ");
+}
+
+~~~
+
 ## Śledzenie i projekcja
 
 ~~~ csharp
@@ -432,6 +475,28 @@ using (var context = new MyContext())
                 Orders = b.Orders.Count()
             });
 }
+
+## TrackGraph
+
+
+~~~ csharp
+context.ChangeTracker.TrackGraph(order, e => e.Entry.State = EntityState.Added);
+~~~
+
+
+~~~ csharp
+context.ChangeTracker.TrackGraph(order, e => {
+            if (e.Entry.IsKeySet)
+            {
+                e.Entry.State = EntityState.Unchanged;
+            }
+            else
+            {
+                e.Entry.State = EntityState.Added;
+            }
+        });
+
+~~~
 
 # Praca z odłączonymi encjami
 
