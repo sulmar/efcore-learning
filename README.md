@@ -503,6 +503,8 @@ using (var context = new MyContext())
             });
 }
 
+~~~
+
 ## TrackGraph
 
 TrackGraph to nowa koncepcja wprowadzona wraz z EF Core. Umozliwia przejscie po grafie i ustawienie stanu encji.
