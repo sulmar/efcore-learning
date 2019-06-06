@@ -99,7 +99,9 @@ private static void CreateDbTest()
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddDbContext<MyContext>(options => options.UseSqlite("Data Source=blog.db"));
-}~~~
+}
+
+~~~
 
 - Azure Data Studio
 
