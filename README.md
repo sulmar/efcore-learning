@@ -951,5 +951,34 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 ~~~
 
+# Pobieranie wartości generowanych po stronie serwera
+
+## Podczas wstawiania (insert)
+
+~~~ csharp
+ protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Contact>()
+            .Property(p => p.DateCreated)
+            .ValueGeneratedOnAdd();
+    } 
+~~~
+
+odpowiednik atrybutu: [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
+## Podczas wstawiania lub modyfikacji
+
+~~~ csharp
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Contact>()
+            .Property(p => p.LastAccessed)
+            .ValueGeneratedOnAddOrUpdate();
+    } 
+~~~
+
+odpowiednik atrybutu:  [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+
+
 # Migracja z EF6 do EF Core
 http://www.mikee.se/posts/migrating_from_ef6_to_ef_core
