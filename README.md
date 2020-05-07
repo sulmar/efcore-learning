@@ -446,14 +446,45 @@ http://sqlitebrowser.org
 
 # Śledzenie (Tracking)
 
+Domyślnie wszystkie pobierane obiekty poprzez context są śledzone i dzięki temu po przy wywołaniu metody _SaveChanges_ zmiany utrwalane są w bazie danych.
+
 ## AutoDetectChanges
 
 Domyślnie właściwośc _ChangeTracker.AutoDetectChanges_ jest ustawiona na true.
 W celu zwiększenia wydajności, zwłaszcza przy dodawaniu wielu encji, ustaw na false.  
 Pamiętaj o wywołaniu metody _DetectChanges()_ przed _SaveChanges()_
 
+~~~ csharp
+private static void DetectChangesTest()
+{
+    var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
+    optionsBuilder.UseSqlite("Data Source=blog.db")
+      .EnableSensitiveDataLogging();
 
-## Wyłączenie śledzenia
+    var context = new MyContext(optionsBuilder.Options);
+    
+    context.ChangeTracker.AutoDetectChangesEnabled = false;
+
+    Customer customer = new Customer { Id = 5, FirstName = "Abc" };
+
+    context.Customers.Attach(customer);
+
+    Console.WriteLine(context.Entry(customer).State);
+
+    customer.FirstName = "Xyz";
+
+    Console.WriteLine(context.Entry(customer).State);
+
+    context.ChangeTracker.DetectChanges();
+
+    Console.WriteLine(context.Entry(customer).State);
+
+
+}
+
+~~~
+
+## Wyłączenie śledzenia pojedynczego zapytania
 
 ~~~ csharp
 using (var context = new MyContext())
