@@ -506,6 +506,61 @@ using (var context = new MyContext())
 }
 ~~~
 
+
+## Strategia ChangedNotifications
+
+EF Core umożliwia śledzenie zmian na podstawie interfejsu *INotifyPropertyChanged*
+
+
+~~~ csharp
+public abstract class BaseEntity : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected void OnPropertyChanged([CallerMemberName] string propname = "")
+    {
+        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propname));
+    }
+}
+
+public class Customer : BaseEntity
+{
+    public int Id { get; set; }
+
+    private string firstname;
+    public string FirstName
+    {
+        get => firstname; set
+        {
+            firstname = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string LastName { get; set; }
+}
+~~~
+
+~~~ csharp
+public class MyContext : DbContext
+    {
+        public MyContext(DbContextOptions options) : base(options)
+        {
+            ChangeTracker.AutoDetectChangesEnabled = false;
+        }
+
+        public DbSet<Customer> Customers { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangedNotifications);
+
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+~~~
+
 ## Pobranie informacji o encjach
 
 ~~~ csharp
